@@ -15,6 +15,7 @@
     "prettier:write": "prettier --write .",
     "serve": "gatsby serve",
     "start": "gatsby develop",
+    "tsc": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
