@@ -4,7 +4,7 @@ import {
   type FinalExamRank,
   type IdolParameters,
   calculateNecessaryFinalExamScores,
-} from "./utils";
+} from "../utils";
 
 const siteTitle = "学マス最終試験スコア逆算ツール";
 
