@@ -5,17 +5,19 @@ const finalExamRanks = {
   },
   "2": {
     rating: 900,
+    // TODO: この値で正しいか不明
     idolParameterIncrease: 20,
   },
   "3": {
     rating: 500,
+    // TODO: この値で正しいか不明
     idolParameterIncrease: 10,
   },
 } as const;
 
-type FinalExamRank = keyof typeof finalExamRanks;
+export type FinalExamRank = keyof typeof finalExamRanks;
 
-type IdolParameters = {
+export type IdolParameters = {
   vocal: number;
   dance: number;
   visual: number;
