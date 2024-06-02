@@ -1,7 +1,10 @@
 import * as React from "react";
 import type { HeadFC, PageProps } from "gatsby";
-
-type FinalExamRank = "1" | "2" | "3";
+import {
+  type FinalExamRank,
+  type IdolParameters,
+  calculateNecessaryFinalExamScores,
+} from "./utils";
 
 const siteTitle = "学マス最終試験スコア逆算ツール";
 
@@ -49,43 +52,21 @@ const necessaryFinalExamScoresTableScoreTdStyles = {
   textAlign: "right",
 } as const;
 
-const useFinalExamCalculation = () => {
-  return {
-    necessaryFinalExamScores: [
-      {
-        rank: "S",
-        score: 30000,
-      },
-      {
-        rank: "A+",
-        score: 15000,
-      },
-      {
-        rank: "A",
-        score: 5000,
-      },
-      {
-        rank: "B+",
-        score: 1000,
-      },
-      {
-        rank: "B",
-        score: 0,
-      },
-      {
-        rank: "C",
-        score: 0,
-      },
-      {
-        rank: "C+",
-        score: 0,
-      },
-      {
-        rank: "D",
-        score: 0,
-      },
-    ],
-  };
+const useCalculateNecessaryFinalExamScores = (
+  finalExamRank: FinalExamRank,
+  vocalValue: IdolParameters["vocal"],
+  danceValue: IdolParameters["dance"],
+  visualValue: IdolParameters["visual"],
+) => {
+  return React.useMemo(
+    () =>
+      calculateNecessaryFinalExamScores(
+        finalExamRank,
+        { vocal: vocalValue, dance: danceValue, visual: visualValue },
+        () => {},
+      ),
+    [finalExamRank, vocalValue, danceValue, visualValue],
+  );
 };
 
 const IndexPage: React.FC<PageProps> = () => {
@@ -97,9 +78,9 @@ const IndexPage: React.FC<PageProps> = () => {
     },
     [],
   );
-  const [vocalValue, setVocalValue] = React.useState(0);
-  const [danceValue, setDanceValue] = React.useState(0);
-  const [visualValue, setVisualValue] = React.useState(0);
+  const [vocalValue, setVocalValue] = React.useState(1000);
+  const [danceValue, setDanceValue] = React.useState(1000);
+  const [visualValue, setVisualValue] = React.useState(1000);
   const onChangeVocalValue = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setVocalValue(parseInt(event.currentTarget.value));
@@ -154,7 +135,12 @@ const IndexPage: React.FC<PageProps> = () => {
     },
     [],
   );
-  const finalExamCalculation = useFinalExamCalculation();
+  const necessaryFinalExamScores = useCalculateNecessaryFinalExamScores(
+    finalExamRank,
+    vocalValue,
+    danceValue,
+    visualValue,
+  );
   return (
     <main style={pageStyles}>
       <h1 style={h1Styles}>{siteTitle}</h1>
@@ -171,9 +157,12 @@ const IndexPage: React.FC<PageProps> = () => {
                 onChange={onChangeFinalExamRank}
               >
                 <option value="1">1位</option>
-                <option value="2">2位</option>
-                <option value="3">3位</option>
+                {
+                  //<option value="2">2位</option>
+                  //<option value="3">3位</option>
+                }
               </select>
+              <span style={{ marginLeft: 4 }}>※今は1位のみ</span>
             </td>
           </tr>
           {idolParameterInputs.map((idolParameterInput) => (
@@ -201,18 +190,16 @@ const IndexPage: React.FC<PageProps> = () => {
       <h2 style={h2Styles}>必要な最終試験スコア</h2>
       <table style={necessaryFinalExamScoresTableStyles}>
         <tbody>
-          {finalExamCalculation.necessaryFinalExamScores.map(
-            (necessaryFinalExamScore) => (
-              <tr key={necessaryFinalExamScore.rank}>
-                <td style={necessaryFinalExamScoresTableRankTdStyles}>
-                  {necessaryFinalExamScore.rank}
-                </td>
-                <td style={necessaryFinalExamScoresTableScoreTdStyles}>
-                  {necessaryFinalExamScore.score}
-                </td>
-              </tr>
-            ),
-          )}
+          {necessaryFinalExamScores.map((necessaryFinalExamScore) => (
+            <tr key={necessaryFinalExamScore.name}>
+              <td style={necessaryFinalExamScoresTableRankTdStyles}>
+                {necessaryFinalExamScore.name}
+              </td>
+              <td style={necessaryFinalExamScoresTableScoreTdStyles}>
+                {necessaryFinalExamScore.necessaryScore}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <h2 style={h2Styles}>ランク評価点計算式</h2>
@@ -221,20 +208,20 @@ const IndexPage: React.FC<PageProps> = () => {
           最終試験の順位は、1位:1,700、2位:900、3位:500を評価点へ加算する。
         </li>
         <li>
-          アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験によるパラメータの上昇は、1位:30、2位:20、3位:10。
+          アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験による全パラメータの上昇は、1位:30、2位:不明、3位:不明。
         </li>
         <li>
-          最終試験のスコアは、0-5,000までは0.3倍、5,001-10,000までは0.15倍、10,001-20,000までは0.08倍、20,001-30,000までは0.04倍、30,001-40,000までは0.02倍、40,001以上は0.01倍（いずれも端数切り捨て）を評価点へ加算する。
+          最終試験のスコアは、0から5,000までは0.3倍、5,001から10,000までは0.15倍、10,001から20,000までは0.08倍、20,001から30,000までは0.04倍、30,001から40,000までは0.02倍、40,001以上は0.01倍（いずれも端数切り捨て）を評価点へ加算する。
         </li>
         <li>
-          評価点によりランクが決まる。S:13,001以上、A+:11,501以上、A:10,001以上、B+:8,001以上、B:6,001以上、C+:5,001以上、C:3,001以上、D:3,000以下。
+          評価点によりランクが決まる。S:13,000以上、A+:11,500以上、A:10,000以上、B+:8,000以上、B:6,000以上、C+:4,500以上、C:3,000以上、D:3,000以下。
         </li>
         <li>
-          本計算式は、主に
-          <a href="https://docs.google.com/spreadsheets/u/0/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/htmlview">
-            学マス評価値計算機(公開用)
+          本計算式は、
+          <a href="https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0">
+            学マス評価値計算機
           </a>
-          を参考にさせていただきました。
+          を参考にした。多謝！
         </li>
       </ul>
       <h2 style={h2Styles}>参考・関連リンク</h2>
