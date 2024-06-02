@@ -175,6 +175,7 @@ const IndexPage: React.FC<PageProps> = () => {
               <td>
                 <input
                   type="number"
+                  inputMode="numeric"
                   id={idolParameterInput.htmlId}
                   style={parameterValueInput}
                   value={idolParameterInput.value}
