@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { HeadFC, PageProps } from "gatsby";
+import Layout from "../layouts/layout";
 import {
   type FinalExamRank,
   type IdolParameters,
@@ -142,98 +143,100 @@ const IndexPage: React.FC<PageProps> = () => {
     visualValue,
   );
   return (
-    <main style={pageStyles}>
-      <h1 style={h1Styles}>{siteTitle}</h1>
-      <table style={userInputsTableStyles}>
-        <tbody>
-          <tr>
-            <td>
-              <label htmlFor="finalExamRankInput">最終試験順位</label>
-            </td>
-            <td>
-              <select
-                id="finalExamRankInput"
-                value={finalExamRank}
-                onChange={onChangeFinalExamRank}
-              >
-                <option value="1">1位</option>
-                {
-                  //<option value="2">2位</option>
-                  //<option value="3">3位</option>
-                }
-              </select>
-              <span style={{ marginLeft: 4 }}>※今は1位のみ</span>
-            </td>
-          </tr>
-          {idolParameterInputs.map((idolParameterInput) => (
-            <tr key={idolParameterInput.htmlId}>
+    <Layout>
+      <main style={pageStyles}>
+        <h1 style={h1Styles}>{siteTitle}</h1>
+        <table style={userInputsTableStyles}>
+          <tbody>
+            <tr>
               <td>
-                <label htmlFor={idolParameterInput.htmlId}>
-                  {idolParameterInput.name}:
-                </label>
+                <label htmlFor="finalExamRankInput">最終試験順位</label>
               </td>
               <td>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  id={idolParameterInput.htmlId}
-                  style={parameterValueInput}
-                  value={idolParameterInput.value}
-                  onChange={idolParameterInput.onChange}
-                  onFocus={onFocusParameterInput}
-                />
+                <select
+                  id="finalExamRankInput"
+                  value={finalExamRank}
+                  onChange={onChangeFinalExamRank}
+                >
+                  <option value="1">1位</option>
+                  {
+                    //<option value="2">2位</option>
+                    //<option value="3">3位</option>
+                  }
+                </select>
+                <span style={{ marginLeft: 4 }}>※今は1位のみ</span>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div style={arrowDownStyle}>⇩</div>
-      <h2 style={h2Styles}>必要な最終試験スコア</h2>
-      <table style={necessaryFinalExamScoresTableStyles}>
-        <tbody>
-          {necessaryFinalExamScores.map((necessaryFinalExamScore) => (
-            <tr key={necessaryFinalExamScore.name}>
-              <td style={necessaryFinalExamScoresTableRankTdStyles}>
-                {necessaryFinalExamScore.name}
-              </td>
-              <td style={necessaryFinalExamScoresTableScoreTdStyles}>
-                {necessaryFinalExamScore.necessaryScore}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <h2 style={h2Styles}>ランク評価点計算式</h2>
-      <ul>
-        <li>
-          最終試験の順位は、1位:1,700、2位:900、3位:500を評価点へ加算する。
-        </li>
-        <li>
-          アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験による全パラメータの上昇は、1位:30、2位:不明、3位:不明。
-        </li>
-        <li>
-          最終試験のスコアは、0から5,000までは0.3倍、5,001から10,000までは0.15倍、10,001から20,000までは0.08倍、20,001から30,000までは0.04倍、30,001から40,000までは0.02倍、40,001以上は0.01倍（いずれも端数切り捨て）を評価点へ加算する。
-        </li>
-        <li>
-          評価点によりランクが決まる。S:13,000以上、A+:11,500以上、A:10,000以上、B+:8,000以上、B:6,000以上、C+:4,500以上、C:3,000以上、D:3,000以下。
-        </li>
-        <li>
-          本計算式は、
-          <a href="https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0">
-            学マス評価値計算機
-          </a>
-          を参考にした。多謝！
-        </li>
-      </ul>
-      <h2 style={h2Styles}>参考・関連リンク</h2>
-      <ul>
-        <li>
-          <a href="https://github.com/kjirou/gakumasu-final-exam-checker">
-            GitHub
-          </a>
-        </li>
-      </ul>
-    </main>
+            {idolParameterInputs.map((idolParameterInput) => (
+              <tr key={idolParameterInput.htmlId}>
+                <td>
+                  <label htmlFor={idolParameterInput.htmlId}>
+                    {idolParameterInput.name}:
+                  </label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    id={idolParameterInput.htmlId}
+                    style={parameterValueInput}
+                    value={idolParameterInput.value}
+                    onChange={idolParameterInput.onChange}
+                    onFocus={onFocusParameterInput}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div style={arrowDownStyle}>⇩</div>
+        <h2 style={h2Styles}>必要な最終試験スコア</h2>
+        <table style={necessaryFinalExamScoresTableStyles}>
+          <tbody>
+            {necessaryFinalExamScores.map((necessaryFinalExamScore) => (
+              <tr key={necessaryFinalExamScore.name}>
+                <td style={necessaryFinalExamScoresTableRankTdStyles}>
+                  {necessaryFinalExamScore.name}
+                </td>
+                <td style={necessaryFinalExamScoresTableScoreTdStyles}>
+                  {necessaryFinalExamScore.necessaryScore}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <h2 style={h2Styles}>ランク評価点計算式</h2>
+        <ul>
+          <li>
+            最終試験の順位は、1位:1,700、2位:900、3位:500を評価点へ加算する。
+          </li>
+          <li>
+            アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験による全パラメータの上昇は、1位:30、2位:不明、3位:不明。
+          </li>
+          <li>
+            最終試験のスコアは、0から5,000までは0.3倍、5,001から10,000までは0.15倍、10,001から20,000までは0.08倍、20,001から30,000までは0.04倍、30,001から40,000までは0.02倍、40,001以上は0.01倍（いずれも端数切り捨て）を評価点へ加算する。
+          </li>
+          <li>
+            評価点によりランクが決まる。S:13,000以上、A+:11,500以上、A:10,000以上、B+:8,000以上、B:6,000以上、C+:4,500以上、C:3,000以上、D:3,000以下。
+          </li>
+          <li>
+            本計算式は、
+            <a href="https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0">
+              学マス評価値計算機
+            </a>
+            を参考にした。多謝！
+          </li>
+        </ul>
+        <h2 style={h2Styles}>参考・関連リンク</h2>
+        <ul>
+          <li>
+            <a href="https://github.com/kjirou/gakumasu-final-exam-checker">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </main>
+    </Layout>
   );
 };
 
