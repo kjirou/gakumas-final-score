@@ -103,6 +103,7 @@
   },
   "include": [
     "./src/**/*",
+    "./gatsby-css.d.ts",
     "./gatsby-node.ts",
     "./gatsby-config.ts",
     "./plugins/**/*"
