@@ -11,9 +11,9 @@ import {
 import * as styles from "./index.module.css";
 
 const siteUrl = "https://gakumasu-final-score.netlify.app/";
-const siteTitle = "学マス最終試験スコア逆算ツール";
+const siteTitle = "学マス最終試験スコア計算ツール";
 const siteSummary =
-  "学園アイドルマスターの最終試験で、SやA+のために必要なスコアを計算するツール";
+  "学園アイドルマスターの最終試験で、S/A+ランクのために必要なスコアを計算するツール";
 const ogImageUrl = `${siteUrl}og-image.png`;
 
 const useCalculateNecessaryFinalExamScores = (
@@ -175,7 +175,7 @@ export const IndexPage: React.FC<PageProps> = () => {
             ))}
           </tbody>
         </table>
-        <h2>ランク評価点計算式</h2>
+        <h2>ランク評価点計算式解説</h2>
         <ul>
           <li>難易度はプロ前提、レギュラーで同じ結果になるかは不明。</li>
           <li>
