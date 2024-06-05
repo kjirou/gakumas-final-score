@@ -1,16 +1,14 @@
-const finalExamRanks = {
+export const finalExamRanks = {
   "1": {
     rating: 1700,
     idolParameterIncrease: 30,
   },
   "2": {
     rating: 900,
-    // TODO: この値で正しいか不明
     idolParameterIncrease: 20,
   },
   "3": {
     rating: 500,
-    // TODO: この値で正しいか不明
     idolParameterIncrease: 10,
   },
 } as const;
@@ -165,4 +163,8 @@ export const calculateNecessaryFinalExamScores = (
       ),
     };
   });
+};
+
+export const formatIntegerStringWithCommas = (integerString: string) => {
+  return integerString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

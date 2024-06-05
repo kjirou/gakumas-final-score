@@ -5,54 +5,14 @@ import {
   type FinalExamRank,
   type IdolParameters,
   calculateNecessaryFinalExamScores,
+  finalExamRanks,
+  formatIntegerStringWithCommas,
 } from "../../utils";
-import styles from "./index.module.css";
+import * as styles from "./index.module.css";
 
 const siteTitle = "学マス最終試験スコア逆算ツール";
-
-const pageStyles = {
-  margin: "0 auto",
-  fontSize: "1em",
-  width: 360,
-} as const;
-
-const h1Styles = {
-  fontSize: "1.25em",
-  textAlign: "center",
-} as const;
-
-const h2Styles = {
-  fontSize: "1em",
-  textAlign: "center",
-} as const;
-
-const userInputsTableStyles = {
-  width: "100%",
-} as const;
-
-const parameterValueInput = {
-  textAlign: "right",
-} as const;
-
-const arrowDownStyle = {
-  padding: "0.5em",
-  fontSize: "1em",
-  textAlign: "center",
-} as const;
-
-const necessaryFinalExamScoresTableStyles = {
-  margin: "0 auto",
-  width: "40%",
-} as const;
-
-const necessaryFinalExamScoresTableRankTdStyles = {
-  textAlign: "center",
-  fontWeight: "bold",
-} as const;
-
-const necessaryFinalExamScoresTableScoreTdStyles = {
-  textAlign: "right",
-} as const;
+const siteSummary =
+  "学園アイドルマスターの最終試験で、SやA+のために必要なスコアを計算するツール";
 
 const useCalculateNecessaryFinalExamScores = (
   finalExamRank: FinalExamRank,
@@ -107,18 +67,21 @@ export const IndexPage: React.FC<PageProps> = () => {
         name: "試験前のボーカル(Vo)",
         htmlId: "parameterInputVocal",
         value: vocalValue,
+        className: "vocalColor",
         onChange: onChangeVocalValue,
       },
       {
         name: "試験前のダンス(Da)",
         htmlId: "parameterInputDance",
         value: danceValue,
+        className: "danceColor",
         onChange: onChangeDanceValue,
       },
       {
         name: "試験前のビジュアル(Vi)",
         htmlId: "parameterInputVisual",
         value: visualValue,
+        className: "visualColor",
         onChange: onChangeVisualValue,
       },
     ],
@@ -145,42 +108,44 @@ export const IndexPage: React.FC<PageProps> = () => {
   );
   return (
     <Layout>
-      <main style={pageStyles}>
-        <h1 style={h1Styles}>{siteTitle}</h1>
-        <table style={userInputsTableStyles}>
+      <main className={styles.page}>
+        <h1>{siteTitle}</h1>
+        <p className={styles.siteSummary}>{siteSummary}</p>
+        <table className={styles.idolParameterInputs}>
           <tbody>
             <tr>
-              <td>
+              <th>
                 <label htmlFor="finalExamRankInput">最終試験順位</label>
-              </td>
+              </th>
               <td>
                 <select
                   id="finalExamRankInput"
                   value={finalExamRank}
                   onChange={onChangeFinalExamRank}
                 >
-                  <option value="1">1位</option>
-                  {
-                    //<option value="2">2位</option>
-                    //<option value="3">3位</option>
-                  }
+                  {Object.keys(finalExamRanks).map((finalExamRankKey) => (
+                    <option key={finalExamRankKey} value={finalExamRankKey}>
+                      {finalExamRankKey}位
+                    </option>
+                  ))}
                 </select>
-                <span style={{ marginLeft: 4 }}>※今は1位のみ</span>
               </td>
             </tr>
             {idolParameterInputs.map((idolParameterInput) => (
               <tr key={idolParameterInput.htmlId}>
-                <td>
-                  <label htmlFor={idolParameterInput.htmlId}>
+                <th>
+                  <label
+                    htmlFor={idolParameterInput.htmlId}
+                    className={styles[idolParameterInput.className]}
+                  >
                     {idolParameterInput.name}:
                   </label>
-                </td>
+                </th>
                 <td>
                   <input
                     type="number"
                     inputMode="numeric"
                     id={idolParameterInput.htmlId}
-                    style={parameterValueInput}
                     value={idolParameterInput.value}
                     onChange={idolParameterInput.onChange}
                     onFocus={onFocusParameterInput}
@@ -190,29 +155,32 @@ export const IndexPage: React.FC<PageProps> = () => {
             ))}
           </tbody>
         </table>
-        <div style={arrowDownStyle}>⇩</div>
-        <h2 style={h2Styles}>必要な最終試験スコア</h2>
-        <table style={necessaryFinalExamScoresTableStyles}>
+        <div className={styles.arrowDown}>
+          <div />
+        </div>
+        <h2>必要な最終試験スコア</h2>
+        <table className={styles.necessaryFinalExamScores}>
           <tbody>
             {necessaryFinalExamScores.map((necessaryFinalExamScore) => (
               <tr key={necessaryFinalExamScore.name}>
-                <td style={necessaryFinalExamScoresTableRankTdStyles}>
-                  {necessaryFinalExamScore.name}
-                </td>
-                <td style={necessaryFinalExamScoresTableScoreTdStyles}>
-                  {necessaryFinalExamScore.necessaryScore}
+                <th>{necessaryFinalExamScore.name}</th>
+                <td>
+                  {formatIntegerStringWithCommas(
+                    String(necessaryFinalExamScore.necessaryScore),
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <h2 style={h2Styles}>ランク評価点計算式</h2>
+        <h2>ランク評価点計算式</h2>
         <ul>
+          <li>難易度はプロ前提、レギュラーで同じ結果になるかは不明。</li>
           <li>
             最終試験の順位は、1位:1,700、2位:900、3位:500を評価点へ加算する。
           </li>
           <li>
-            アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験による全パラメータの上昇は、1位:30、2位:不明、3位:不明。
+            アイドルのパラメータは、合計値の2.3倍（端数切り捨て）を評価点へ加算する。なお、最終試験による全パラメータの上昇は、1位:30、2位:20、3位:10。
           </li>
           <li>
             最終試験のスコアは、0から5,000までは0.3倍、5,001から10,000までは0.15倍、10,001から20,000までは0.08倍、20,001から30,000までは0.04倍、30,001から40,000までは0.02倍、40,001以上は0.01倍（いずれも端数切り捨て）を評価点へ加算する。
@@ -228,7 +196,7 @@ export const IndexPage: React.FC<PageProps> = () => {
             を参考にした。多謝！
           </li>
         </ul>
-        <h2 style={h2Styles}>参考・関連リンク</h2>
+        <h2>参考・関連リンク</h2>
         <ul>
           <li>
             <a href="https://github.com/kjirou/gakumasu-final-exam-checker">
@@ -241,4 +209,16 @@ export const IndexPage: React.FC<PageProps> = () => {
   );
 };
 
-export const IndexPageHead: HeadFC = () => <title>{siteTitle}</title>;
+export const IndexPageHead: HeadFC = () => (
+  <>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={siteSummary} />
+    <meta
+      name="keywords"
+      content="学園アイドルマスター,学マス,最終試験スコア,評価値,アイドルランク,クリアランク"
+    />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteSummary} />
+    <title>{siteTitle}</title>
+  </>
+);

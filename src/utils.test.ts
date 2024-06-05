@@ -1,6 +1,7 @@
 import {
   calculateNecessaryFinalExamScoreForSpecificRating,
   calculateNecessaryFinalExamScores,
+  formatIntegerStringWithCommas,
 } from "./utils";
 
 describe("calculateNecessaryFinalExamScoreForSpecificRating", () => {
@@ -138,5 +139,72 @@ describe("calculateNecessaryFinalExamScores", () => {
         );
       },
     );
+  });
+});
+
+describe("formatIntegerStringWithCommas", () => {
+  const testCases: Array<{
+    args: Parameters<typeof formatIntegerStringWithCommas>;
+    expected: ReturnType<typeof formatIntegerStringWithCommas>;
+  }> = [
+    {
+      args: ["0"],
+      expected: "0",
+    },
+    {
+      args: ["1"],
+      expected: "1",
+    },
+    {
+      args: ["10"],
+      expected: "10",
+    },
+    {
+      args: ["100"],
+      expected: "100",
+    },
+    {
+      args: ["1000"],
+      expected: "1,000",
+    },
+    {
+      args: ["1001"],
+      expected: "1,001",
+    },
+    {
+      args: ["10000"],
+      expected: "10,000",
+    },
+    {
+      args: ["1000000"],
+      expected: "1,000,000",
+    },
+    {
+      args: ["1000000000"],
+      expected: "1,000,000,000",
+    },
+    {
+      args: ["-0"],
+      expected: "-0",
+    },
+    {
+      args: ["-10"],
+      expected: "-10",
+    },
+    {
+      args: ["-1000"],
+      expected: "-1,000",
+    },
+    {
+      args: ["-10000"],
+      expected: "-10,000",
+    },
+    {
+      args: ["-1000000"],
+      expected: "-1,000,000",
+    },
+  ];
+  test.each(testCases)("$args -> $expected", ({ args, expected }) => {
+    expect(formatIntegerStringWithCommas(...args)).toBe(expected);
   });
 });

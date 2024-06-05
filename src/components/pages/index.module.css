@@ -1,0 +1,67 @@
+.page {
+  margin: 0 auto;
+  font-size: 1em;
+  width: 360px;
+}
+.page h1 {
+  font-size: 1.25em;
+  text-align: center;
+}
+.page h2 {
+  font-size: 1em;
+  text-align: center;
+}
+p.siteSummary {
+  font-size: 0.75em;
+  color: #666;
+}
+table.idolParameterInputs {
+  width: 100%;
+  border-spacing: 0 8px;
+}
+table.idolParameterInputs th {
+  font-weight: normal;
+  text-align: left;
+}
+table.idolParameterInputs select {
+  padding: 4px;
+  text-align: right;
+  font-size: 1.25em;
+}
+table.idolParameterInputs input[type="number"] {
+  padding: 4px;
+  width: 100px;
+  text-align: right;
+  font-size: 1.25em;
+}
+table.necessaryFinalExamScores {
+  margin: 0 auto;
+  width: 40%;
+  border-spacing: 0 8px;
+  font-size: 1.25em;
+}
+table.necessaryFinalExamScores td {
+  text-align: right;
+}
+.vocalColor {
+  color: red;
+}
+.danceColor {
+  color: blue;
+}
+.visualColor {
+  color: #ffcc00;
+}
+.arrowDown {
+  padding: 0.5rem;
+  text-align: center;
+}
+.arrowDown > div {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0 10px;
+  border-bottom: 4px solid #000;
+  border-right: 4px solid #000;
+  transform: rotate(45deg);
+}
