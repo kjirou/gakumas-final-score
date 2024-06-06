@@ -1,8 +1,8 @@
 {
-  "name": "gakumasu-final-exam-checker",
+  "name": "gakumas-final-score",
   "version": "1.0.0",
   "private": true,
-  "description": "gakumasu-final-exam-checker",
+  "description": "gakumas-final-score",
   "author": "kjirou",
   "keywords": [
     "gatsby"

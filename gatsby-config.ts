@@ -3,7 +3,7 @@ import adapter from "gatsby-adapter-netlify";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `gakumasu-final-exam-checker`,
+    title: `gakumas-final-score`,
     siteUrl: `https://www.yourdomain.tld`,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
