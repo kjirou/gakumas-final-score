@@ -1,4 +1,4 @@
-# gakumas-final-score
+# gakumas-final-score 学マス最終試験スコア計算ツール
 
 学園アイドルマスターでS/A+のために必要な最終試験のスコアを計算するWebツール
 
