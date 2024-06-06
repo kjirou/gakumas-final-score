@@ -215,7 +215,7 @@ export const IndexPageHead: HeadFC = () => (
     <meta name="description" content={siteSummary} />
     <meta
       name="keywords"
-      content="学園アイドルマスター,学マス,最終試験スコア,評価値,アイドルランク,クリアランク"
+      content="学園アイドルマスター,学マス,gakumas,gakumasu,最終試験スコア,評価値,アイドルランク,クリアランク"
     />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteSummary} />
