@@ -10,7 +10,7 @@ import {
 } from "../../utils";
 import * as styles from "./index.module.css";
 
-const siteUrl = "https://gakumasu-final-score.netlify.app/";
+const siteUrl = "https://gakumas-final-score.netlify.app/";
 const siteTitle = "学マス最終試験スコア計算ツール";
 const siteSummary =
   "学園アイドルマスターの最終試験で、S/A+ランクのために必要なスコアを計算するツール";
@@ -201,9 +201,7 @@ export const IndexPage: React.FC<PageProps> = () => {
         <h2>参考・関連リンク</h2>
         <ul>
           <li>
-            <a href="https://github.com/kjirou/gakumasu-final-exam-checker">
-              GitHub
-            </a>
+            <a href="https://github.com/kjirou/gakumas-final-score">GitHub</a>
           </li>
         </ul>
       </main>
@@ -217,7 +215,7 @@ export const IndexPageHead: HeadFC = () => (
     <meta name="description" content={siteSummary} />
     <meta
       name="keywords"
-      content="学園アイドルマスター,学マス,最終試験スコア,評価値,アイドルランク,クリアランク"
+      content="学園アイドルマスター,学マス,gakumas,gakumasu,最終試験スコア,評価値,アイドルランク,クリアランク"
     />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteSummary} />
