@@ -1,6 +1,6 @@
 # gakumas-final-score
 
-学園アイドルマスターでS/A+のために必要な最終試験のスコアを計算するWebツール
+学マス最終試験スコア計算ツール: 学園アイドルマスターでS/A+のために必要な最終試験のスコアを計算するWebツール
 
 ## :hammer_and_wrench: Development
 
