@@ -220,6 +220,7 @@ export const IndexPageHead: HeadFC = () => (
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteSummary} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="twitter:card" content="summary" />
     <title>{siteTitle}</title>
   </>
 );
