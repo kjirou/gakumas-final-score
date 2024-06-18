@@ -16,6 +16,79 @@ const siteSummary =
   "学園アイドルマスターの最終試験で、S/A+ランクのために必要なスコアを計算するツール";
 const ogImageUrl = `${siteUrl}og-image.png`;
 
+const useVariablesInLocalStorage = (): {
+  danceValue: number;
+  finalExamRank: FinalExamRank;
+  visualValue: number;
+  vocalValue: number;
+  setDanceValue: React.Dispatch<React.SetStateAction<number>>;
+  setFinalExamRank: React.Dispatch<React.SetStateAction<FinalExamRank>>;
+  setVocalValue: React.Dispatch<React.SetStateAction<number>>;
+  setVisualValue: React.Dispatch<React.SetStateAction<number>>;
+} => {
+  const [localStorageLoaded, setLocalStorageLoaded] = React.useState(false);
+  const [finalExamRank, setFinalExamRank] = React.useState<FinalExamRank>("1");
+  const [vocalValue, setVocalValue] = React.useState(1000);
+  const [danceValue, setDanceValue] = React.useState(1000);
+  const [visualValue, setVisualValue] = React.useState(1000);
+  React.useEffect(() => {
+    setLocalStorageLoaded(true);
+    const storedFinalExamRank = window.localStorage.getItem("finalExamRank");
+    if (storedFinalExamRank) {
+      try {
+        setFinalExamRank(JSON.parse(storedFinalExamRank));
+      } catch {
+        return;
+      }
+    }
+    const storedDanceValue = window.localStorage.getItem("danceValue");
+    if (storedDanceValue) {
+      try {
+        setDanceValue(JSON.parse(storedDanceValue));
+      } catch {
+        return;
+      }
+    }
+    const storedVisualValue = window.localStorage.getItem("visualValue");
+    if (storedVisualValue) {
+      try {
+        setVisualValue(JSON.parse(storedVisualValue));
+      } catch {
+        return;
+      }
+    }
+    const storedVocalValue = window.localStorage.getItem("vocalValue");
+    if (storedVocalValue) {
+      try {
+        setVocalValue(JSON.parse(storedVocalValue));
+      } catch {
+        return;
+      }
+    }
+  }, []);
+  React.useEffect(() => {
+    if (localStorageLoaded) {
+      window.localStorage.setItem(
+        "finalExamRank",
+        JSON.stringify(finalExamRank),
+      );
+      window.localStorage.setItem("danceValue", JSON.stringify(danceValue));
+      window.localStorage.setItem("visualValue", JSON.stringify(visualValue));
+      window.localStorage.setItem("vocalValue", JSON.stringify(vocalValue));
+    }
+  }, [localStorageLoaded, finalExamRank, visualValue, danceValue, vocalValue]);
+  return {
+    danceValue,
+    finalExamRank,
+    visualValue,
+    vocalValue,
+    setDanceValue,
+    setFinalExamRank,
+    setVocalValue,
+    setVisualValue,
+  };
+};
+
 const useCalculateNecessaryFinalExamScores = (
   finalExamRank: FinalExamRank,
   vocalValue: IdolParameters["vocal"],
@@ -34,7 +107,16 @@ const useCalculateNecessaryFinalExamScores = (
 };
 
 export const IndexPage: React.FC<PageProps> = () => {
-  const [finalExamRank, setFinalExamRank] = React.useState<FinalExamRank>("1");
+  const {
+    finalExamRank,
+    vocalValue,
+    danceValue,
+    visualValue,
+    setFinalExamRank,
+    setVocalValue,
+    setDanceValue,
+    setVisualValue,
+  } = useVariablesInLocalStorage();
   const onChangeFinalExamRank = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       // TODO: Type guard
@@ -42,9 +124,6 @@ export const IndexPage: React.FC<PageProps> = () => {
     },
     [],
   );
-  const [vocalValue, setVocalValue] = React.useState(1000);
-  const [danceValue, setDanceValue] = React.useState(1000);
-  const [visualValue, setVisualValue] = React.useState(1000);
   const onChangeVocalValue = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setVocalValue(parseInt(event.currentTarget.value));
