@@ -85,15 +85,16 @@ describe("calculateNecessaryFinalExamScores", () => {
     );
     expect(result1500).toStrictEqual(result1470);
   });
-  // Original: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
-  describe("compares it with the behavior of the original Google Sheets", () => {
+  describe("compares with real-world results", () => {
     const testCases: Array<{
       args: Parameters<typeof calculateNecessaryFinalExamScores>;
       expected: ReturnType<typeof calculateNecessaryFinalExamScores>;
     }> = [
+      // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
         args: ["1", { vocal: 1000, dance: 1000, visual: 1000 }, () => {}],
         expected: [
+          expect.any(Object),
           { name: "S", necessaryScore: 94300 },
           { name: "A+", necessaryScore: 15538 },
           { name: "A", necessaryScore: 3977 },
@@ -104,9 +105,11 @@ describe("calculateNecessaryFinalExamScores", () => {
           { name: "D", necessaryScore: 0 },
         ],
       },
+      // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
         args: ["1", { vocal: 70, dance: 70, visual: 70 }, () => {}],
         expected: [
+          expect.any(Object),
           { name: "S", necessaryScore: 736000 },
           { name: "A+", necessaryScore: 586000 },
           { name: "A", necessaryScore: 436000 },
@@ -117,9 +120,11 @@ describe("calculateNecessaryFinalExamScores", () => {
           { name: "D", necessaryScore: 0 },
         ],
       },
+      // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
         args: ["1", { vocal: 1470, dance: 1470, visual: 1470 }, () => {}],
         expected: [
+          expect.any(Object),
           { name: "S", necessaryScore: 3167 },
           { name: "A+", necessaryScore: 0 },
           { name: "A", necessaryScore: 0 },
@@ -128,6 +133,21 @@ describe("calculateNecessaryFinalExamScores", () => {
           { name: "C+", necessaryScore: 0 },
           { name: "C", necessaryScore: 0 },
           { name: "D", necessaryScore: 0 },
+        ],
+      },
+      // Source: "学マスS+取得者の構成から見る「基本の大切さ」"<https://note.com/danbobo/n/n5713c3b5cc1a>
+      {
+        args: ["1", { vocal: 899, dance: 1454, visual: 1470 }, () => {}],
+        expected: [
+          { name: "S+", necessaryScore: 55100 },
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
         ],
       },
     ];

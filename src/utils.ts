@@ -28,6 +28,10 @@ const addIdolParameter = (a: number, b: number) =>
 
 const IdolRanks = [
   {
+    name: "S+",
+    necessaryRating: 14500,
+  },
+  {
     name: "S",
     necessaryRating: 13000,
   },
