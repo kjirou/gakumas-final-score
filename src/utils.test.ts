@@ -1,6 +1,7 @@
 import {
   calculateNecessaryFinalExamScoreForSpecificRating,
   calculateNecessaryFinalExamScores,
+  difficulties,
   formatIntegerStringWithCommas,
 } from "./utils";
 
@@ -72,27 +73,49 @@ describe("calculateNecessaryFinalExamScoreForSpecificRating", () => {
 });
 
 describe("calculateNecessaryFinalExamScores", () => {
-  test("all 1500 parameters results as the same result as all 1470 parameters", () => {
+  test("難易度がプロの時、全パラメータが1500と1470の結果は等しい", () => {
     const result1500 = calculateNecessaryFinalExamScores(
+      difficulties[1],
       "1",
       { vocal: 1500, dance: 1500, visual: 1500 },
       () => {},
     );
     const result1470 = calculateNecessaryFinalExamScores(
+      difficulties[1],
       "1",
       { vocal: 1470, dance: 1470, visual: 1470 },
       () => {},
     );
     expect(result1500).toStrictEqual(result1470);
   });
-  describe("compares with real-world results", () => {
+  test("難易度がマスターの時、全パラメータが1800と1770の結果は等しい", () => {
+    const result1500 = calculateNecessaryFinalExamScores(
+      difficulties[0],
+      "1",
+      { vocal: 1800, dance: 1800, visual: 1800 },
+      () => {},
+    );
+    const result1470 = calculateNecessaryFinalExamScores(
+      difficulties[0],
+      "1",
+      { vocal: 1770, dance: 1770, visual: 1770 },
+      () => {},
+    );
+    expect(result1500).toStrictEqual(result1470);
+  });
+  describe("外部のツールや解説記事の結果と一致するか", () => {
     const testCases: Array<{
       args: Parameters<typeof calculateNecessaryFinalExamScores>;
       expected: ReturnType<typeof calculateNecessaryFinalExamScores>;
     }> = [
       // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
-        args: ["1", { vocal: 1000, dance: 1000, visual: 1000 }, () => {}],
+        args: [
+          difficulties[1],
+          "1",
+          { vocal: 1000, dance: 1000, visual: 1000 },
+          () => {},
+        ],
         expected: [
           expect.any(Object),
           { name: "S", necessaryScore: 94300 },
@@ -107,7 +130,12 @@ describe("calculateNecessaryFinalExamScores", () => {
       },
       // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
-        args: ["1", { vocal: 70, dance: 70, visual: 70 }, () => {}],
+        args: [
+          difficulties[1],
+          "1",
+          { vocal: 70, dance: 70, visual: 70 },
+          () => {},
+        ],
         expected: [
           expect.any(Object),
           { name: "S", necessaryScore: 736000 },
@@ -122,7 +150,12 @@ describe("calculateNecessaryFinalExamScores", () => {
       },
       // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
       {
-        args: ["1", { vocal: 1470, dance: 1470, visual: 1470 }, () => {}],
+        args: [
+          difficulties[1],
+          "1",
+          { vocal: 1470, dance: 1470, visual: 1470 },
+          () => {},
+        ],
         expected: [
           expect.any(Object),
           { name: "S", necessaryScore: 3167 },
@@ -135,9 +168,34 @@ describe("calculateNecessaryFinalExamScores", () => {
           { name: "D", necessaryScore: 0 },
         ],
       },
+      // Source: "学マス評価値計算機"<https://docs.google.com/spreadsheets/d/1eEdzfHGi7iXpohR-UHr5-W1z7PcYBqQr8OAV7gcvhR8/edit#gid=0>
+      {
+        args: [
+          difficulties[0],
+          "1",
+          { vocal: 405, dance: 1800, visual: 1257 },
+          () => {},
+        ],
+        expected: [
+          { name: "S+", necessaryScore: 145000 },
+          { name: "S", necessaryScore: 23750 },
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+          expect.any(Object),
+        ],
+      },
       // Source: "学マスS+取得者の構成から見る「基本の大切さ」"<https://note.com/danbobo/n/n5713c3b5cc1a>
       {
-        args: ["1", { vocal: 899, dance: 1454, visual: 1470 }, () => {}],
+        args: [
+          difficulties[1],
+          "1",
+          { vocal: 899, dance: 1454, visual: 1470 },
+          () => {},
+        ],
         expected: [
           { name: "S+", necessaryScore: 55100 },
           expect.any(Object),

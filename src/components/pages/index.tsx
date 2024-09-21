@@ -1,10 +1,12 @@
-import * as React from "react";
+import React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import Layout from "../../layouts/layout";
 import {
+  type Difficulty,
   type FinalExamRank,
   type IdolParameters,
   calculateNecessaryFinalExamScores,
+  difficulties,
   finalExamRanks,
   formatIntegerStringWithCommas,
 } from "../../utils";
@@ -18,21 +20,33 @@ const ogImageUrl = `${siteUrl}og-image.png`;
 
 const useVariablesInLocalStorage = (): {
   danceValue: number;
+  difficultyIndex: number;
   finalExamRank: FinalExamRank;
   visualValue: number;
   vocalValue: number;
   setDanceValue: React.Dispatch<React.SetStateAction<number>>;
+  setDifficultyIndex: React.Dispatch<React.SetStateAction<number>>;
   setFinalExamRank: React.Dispatch<React.SetStateAction<FinalExamRank>>;
   setVocalValue: React.Dispatch<React.SetStateAction<number>>;
   setVisualValue: React.Dispatch<React.SetStateAction<number>>;
 } => {
   const [localStorageLoaded, setLocalStorageLoaded] = React.useState(false);
+  const [difficultyIndex, setDifficultyIndex] = React.useState(0);
   const [finalExamRank, setFinalExamRank] = React.useState<FinalExamRank>("1");
   const [vocalValue, setVocalValue] = React.useState(1000);
   const [danceValue, setDanceValue] = React.useState(1000);
   const [visualValue, setVisualValue] = React.useState(1000);
   React.useEffect(() => {
     setLocalStorageLoaded(true);
+    const storedDifficultyIndex =
+      window.localStorage.getItem("difficultyIndex");
+    if (storedDifficultyIndex) {
+      try {
+        setDifficultyIndex(JSON.parse(storedDifficultyIndex));
+      } catch {
+        return;
+      }
+    }
     const storedFinalExamRank = window.localStorage.getItem("finalExamRank");
     if (storedFinalExamRank) {
       try {
@@ -69,6 +83,10 @@ const useVariablesInLocalStorage = (): {
   React.useEffect(() => {
     if (localStorageLoaded) {
       window.localStorage.setItem(
+        "difficultyIndex",
+        JSON.stringify(difficultyIndex),
+      );
+      window.localStorage.setItem(
         "finalExamRank",
         JSON.stringify(finalExamRank),
       );
@@ -76,13 +94,22 @@ const useVariablesInLocalStorage = (): {
       window.localStorage.setItem("visualValue", JSON.stringify(visualValue));
       window.localStorage.setItem("vocalValue", JSON.stringify(vocalValue));
     }
-  }, [localStorageLoaded, finalExamRank, visualValue, danceValue, vocalValue]);
+  }, [
+    localStorageLoaded,
+    difficultyIndex,
+    finalExamRank,
+    visualValue,
+    danceValue,
+    vocalValue,
+  ]);
   return {
     danceValue,
+    difficultyIndex,
     finalExamRank,
     visualValue,
     vocalValue,
     setDanceValue,
+    setDifficultyIndex,
     setFinalExamRank,
     setVocalValue,
     setVisualValue,
@@ -90,6 +117,7 @@ const useVariablesInLocalStorage = (): {
 };
 
 const useCalculateNecessaryFinalExamScores = (
+  difficulty: Difficulty,
   finalExamRank: FinalExamRank,
   vocalValue: IdolParameters["vocal"],
   danceValue: IdolParameters["dance"],
@@ -98,6 +126,7 @@ const useCalculateNecessaryFinalExamScores = (
   return React.useMemo(
     () =>
       calculateNecessaryFinalExamScores(
+        difficulty,
         finalExamRank,
         { vocal: vocalValue, dance: danceValue, visual: visualValue },
         () => {},
@@ -108,6 +137,7 @@ const useCalculateNecessaryFinalExamScores = (
 
 export const IndexPage: React.FC<PageProps> = () => {
   const {
+    difficultyIndex,
     finalExamRank,
     vocalValue,
     danceValue,
@@ -115,8 +145,16 @@ export const IndexPage: React.FC<PageProps> = () => {
     setFinalExamRank,
     setVocalValue,
     setDanceValue,
+    setDifficultyIndex,
     setVisualValue,
   } = useVariablesInLocalStorage();
+  const diffficulty = difficulties[difficultyIndex];
+  const onChangeDifficultyIndex = React.useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setDifficultyIndex(parseInt(event.currentTarget.value));
+    },
+    [],
+  );
   const onChangeFinalExamRank = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       // TODO: Type guard
@@ -182,6 +220,7 @@ export const IndexPage: React.FC<PageProps> = () => {
     [],
   );
   const necessaryFinalExamScores = useCalculateNecessaryFinalExamScores(
+    diffficulty,
     finalExamRank,
     vocalValue,
     danceValue,
@@ -196,10 +235,30 @@ export const IndexPage: React.FC<PageProps> = () => {
           <tbody>
             <tr>
               <th>
+                <label htmlFor="difficultyInput">難易度</label>
+              </th>
+              <td>
+                <select
+                  className={styles.difficultyInput}
+                  id="difficultyInput"
+                  value={difficultyIndex}
+                  onChange={onChangeDifficultyIndex}
+                >
+                  {difficulties.map((difficulty, index) => (
+                    <option key={difficulty.kind} value={index}>
+                      {difficulty.label}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
                 <label htmlFor="finalExamRankInput">最終試験順位</label>
               </th>
               <td>
                 <select
+                  className={styles.finalExamRankInput}
                   id="finalExamRankInput"
                   value={finalExamRank}
                   onChange={onChangeFinalExamRank}
@@ -256,7 +315,6 @@ export const IndexPage: React.FC<PageProps> = () => {
         </table>
         <h2>ランク評価点計算式解説</h2>
         <ul>
-          <li>難易度はプロ前提、レギュラーで同じ結果になるかは不明。</li>
           <li>
             最終試験の順位は、1位:1,700、2位:900、3位:500を評価点へ加算する。
           </li>

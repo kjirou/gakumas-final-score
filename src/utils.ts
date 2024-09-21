@@ -1,3 +1,23 @@
+export const difficulties = [
+  {
+    kind: "master",
+    label: "マスター",
+    maxIdolParameter: 1800,
+  },
+  {
+    kind: "pro",
+    label: "プロ",
+    maxIdolParameter: 1500,
+  },
+  {
+    kind: "regular",
+    label: "レギュラー",
+    maxIdolParameter: 1000,
+  },
+] as const;
+
+export type Difficulty = (typeof difficulties)[number];
+
 export const finalExamRanks = {
   "1": {
     rating: 1700,
@@ -21,9 +41,7 @@ export type IdolParameters = {
   visual: number;
 };
 
-const maxIdolParameter = 1500;
-
-const addIdolParameter = (a: number, b: number) =>
+const addIdolParameter = (maxIdolParameter: number, a: number, b: number) =>
   Math.min(a + b, maxIdolParameter);
 
 const IdolRanks = [
@@ -124,6 +142,7 @@ export const calculateNecessaryFinalExamScoreForSpecificRating = (
 };
 
 export const calculateNecessaryFinalExamScores = (
+  difficulty: Difficulty,
   finalExamRank: FinalExamRank,
   idolParameters: IdolParameters,
   logHandler: (message: string) => void,
@@ -136,14 +155,17 @@ export const calculateNecessaryFinalExamScores = (
   logHandler(`最終試験前のパラメータ: ${JSON.stringify(idolParameters)}`);
   const idolParametersAfterFinalExam: IdolParameters = {
     vocal: addIdolParameter(
+      difficulty.maxIdolParameter,
       idolParameters.vocal,
       finalExamRankData.idolParameterIncrease,
     ),
     dance: addIdolParameter(
+      difficulty.maxIdolParameter,
       idolParameters.dance,
       finalExamRankData.idolParameterIncrease,
     ),
     visual: addIdolParameter(
+      difficulty.maxIdolParameter,
       idolParameters.visual,
       finalExamRankData.idolParameterIncrease,
     ),
