@@ -117,7 +117,8 @@ describe("calculateNecessaryFinalExamScores", () => {
           () => {},
         ],
         expected: [
-          expect.any(Object),
+          { name: "SS", necessaryScore: expect.any(Number) },
+          { name: "S+", necessaryScore: expect.any(Number) },
           { name: "S", necessaryScore: 94300 },
           { name: "A+", necessaryScore: 15538 },
           { name: "A", necessaryScore: 3977 },
@@ -137,7 +138,8 @@ describe("calculateNecessaryFinalExamScores", () => {
           () => {},
         ],
         expected: [
-          expect.any(Object),
+          { name: "SS", necessaryScore: expect.any(Number) },
+          { name: "S+", necessaryScore: expect.any(Number) },
           { name: "S", necessaryScore: 736000 },
           { name: "A+", necessaryScore: 586000 },
           { name: "A", necessaryScore: 436000 },
@@ -157,7 +159,8 @@ describe("calculateNecessaryFinalExamScores", () => {
           () => {},
         ],
         expected: [
-          expect.any(Object),
+          { name: "SS", necessaryScore: expect.any(Number) },
+          { name: "S+", necessaryScore: expect.any(Number) },
           { name: "S", necessaryScore: 3167 },
           { name: "A+", necessaryScore: 0 },
           { name: "A", necessaryScore: 0 },
@@ -177,6 +180,7 @@ describe("calculateNecessaryFinalExamScores", () => {
           () => {},
         ],
         expected: [
+          { name: "SS", necessaryScore: expect.any(Number) },
           { name: "S+", necessaryScore: 145000 },
           { name: "S", necessaryScore: 23750 },
           expect.any(Object),
@@ -197,6 +201,7 @@ describe("calculateNecessaryFinalExamScores", () => {
           () => {},
         ],
         expected: [
+          { name: "SS", necessaryScore: expect.any(Number) },
           { name: "S+", necessaryScore: 55100 },
           expect.any(Object),
           expect.any(Object),
